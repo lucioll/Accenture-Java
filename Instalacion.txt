@@ -1,0 +1,85 @@
+Instalación:
+1)JDK SE 8, modificando variables de entorno
+2)Gradle 4.10, modificando variables de entorno
+You can use any of several systems when building apps with Spring, but we will be using Gradle because it's so simple.
+
+Create a Gradle Spring Project
+Follow the instructions on how to create a Gradle Spring Project using the Spring Initializr. This simple web tool creates all the folders and files you need to get started. 
+
+Choose the following options at the Spring Initializr site:
+
+Project: Gradle
+Group: com.codeoftheweb (unless you've been told to use another package)
+Artifact: salvo
+Dependencies:
+web
+JPA
+H2
+Rest Repositories
+Click Generate Project to download a Zip archive with your project. 
+
+Create the local directory
+Extract the Zip archive files in a Java project directory of your choosing. For example, if you use ~/workspace/java/ for your Java projects, then you should have ~/workspace/java/salvo/ as a new directory. 
+
+One of the files in the top-level of that directory should be build.gradle.
+
+Initialize the Gradle wrapper
+In your terminal console window, navigate to the top of the project directory, i.e., the directory with build.gradle.
+
+Execute this command:
+
+gradle wrapper
+This will download a number of files and create a runnable file called gradlew.  From this point on, you will use that file to run Gradle commands, e.g., 
+ 
+./gradlew bootRun
+ 
+to run your web application.
+ Test!
+Try running the bootRun task. Even though you've not written any code, Spring has created the shell for one. If you named your artifact salvo, then you'll see Spring Initalizr has created a SalvoApplication class. It looks like this:
+
+package com.codeoftheweb.salvo;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class SalvoApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(SalvoApplication.class, args);
+  }
+}
+ 
+Normally, to run a web application, you have to install the code into a web server, such as Tomcat, JBoss, Jetty, or GlassFish. With Spring, you can run a web application directly, thanks to Spring and the code above : 
+@SpringBootApplication is an annotation that tells Spring this should be a "bootable" web app.
+main() is how you tell Java what code to run first when you run a Java program.
+A Java program is defined as a set of Java classes with exactly one class defining a main() method.
+This particular main() method calls the run() method in the SpringApplication class.
+The run() method in SpringApplication starts an embedded Tomcat web server.
+The first argument to run(), i.e., SalvoApplication.class in this case, specifies the web application to run in the web server.
+To run this program, open a terminal window and execute the command
+ 
+./gradlew bootRun
+
+ 
+You should see many lines of output, ending with 
+ 
+Started Application in ... seconds ...
+
+ 
+If that's the case, try the URL http://localhost:8080 in your browser. You should see JSON in the browser window. Not very useful JSON, but not bad for so little effort.
+ 
+TIP:
+Tip: Chrome can display JSON directly and is our recommended browser for that reason.
+
+TIP:
+Firefox: Get the JSONView plugin. Or download the file and view in a text editor.
+
+TIP:
+Internet Explorer 10: Download the file and view in a text editor.
+
+Stop the Server
+When you're done testing, stop the server in the console by type control-C, i.e., hold down the control key and the C key at the same time. On MacOS, command-period also works.
+3)IntelliJ
