@@ -10,12 +10,12 @@ $(function() {
 
 function updateViewGames(data) {
   var userTxt = data.player;
-  var htmlList = data.games.map(function (games) {
-      return  '<li class="list-group-item">' + new Date(games.crationDate).toLocaleString() + ' ' + games.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
+  var htmlList = data.map(function (games) {
+      return  '<li class="list-group-item">' + new Date(games.creationDate).toLocaleString() + ' ' + games.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
   }).join('');
   $("#game-list").html(htmlList);
   if(userTxt!="Guest"){
-    $("#user-info").text('Hello ' + userTxt.name + '!');
+    $("#user-info").text('Hello ' + userTxt.email + '!');
     showLogin(false);
   }
 }
@@ -23,10 +23,10 @@ function updateViewGames(data) {
 function updateViewLBoard(data) {
   var htmlList = data.map(function (score) {
       return  '<tr><td>' + score.name + '</td>'
-              + '<td>' + score.score.total + '</td>'
-              + '<td>' + score.score.won + '</td>'
-              + '<td>' + score.score.lost + '</td>'
-              + '<td>' + score.score.tied + '</td></tr>';
+              + '<td>' + score.total + '</td>'
+              + '<td>' + score.won + '</td>'
+              + '<td>' + score.lost + '</td>'
+              + '<td>' + score.tied + '</td></tr>';
   }).join('');
   document.getElementById("leader-list").innerHTML = htmlList;
 }

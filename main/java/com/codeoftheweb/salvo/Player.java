@@ -12,7 +12,9 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String userName;
+    private String  email;
+
+    private String password;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private List<GamePlayer> gamePlayers;
@@ -22,16 +24,25 @@ public class Player {
 
     public Player() { }
 
-    public Player(String userName) {
-        this.userName = userName;
+    public Player(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void addGamePlayer(GamePlayer gamePlayer) {
@@ -51,7 +62,7 @@ public class Player {
         return scores.stream().filter(score -> score.getGame().equals(game)).findFirst();
     }
 
-    public Map<String, Integer> getTotalScores() {
+    public Map<String, Integer> countScores() {
         Map<String, Integer> dict = new LinkedHashMap<String, Integer>();
         int won = 0;
         int lost = 0;
@@ -73,7 +84,7 @@ public class Player {
 
     @JsonIgnore
     public double getLeaderboardScore() {
-        Map<String, Integer> dict = getTotalScores();
+        Map<String, Integer> dict = countScores();
         return dict.get("won") + dict.get("tied") * 0.5;
     }
 }

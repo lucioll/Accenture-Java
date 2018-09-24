@@ -35,6 +35,10 @@ public class GamePlayer {
 
     private LocalDateTime joinDate;
 
+    private String gameState;
+
+    private int turn = 1;
+
     public GamePlayer() {
         this.joinDate = LocalDateTime.now();
     }
@@ -70,16 +74,19 @@ public class GamePlayer {
         return ships;
     }
 
-
-    public void setShips(Ship ship) {
+    public void addShip(Ship ship) {
         this.ships.add(ship);
+    }
+
+    public void setShips(List<Ship> ships) {
+        this.ships = ships;
     }
 
     public List<Salvo> getSalvoes() {
         return salvoes;
     }
 
-    public void setSalvoes(Salvo salvo) {
+    public void addSalvo(Salvo salvo) {
         this.salvoes.add(salvo);
     }
 
@@ -93,5 +100,21 @@ public class GamePlayer {
 
     public void setJoinDate(LocalDateTime joinDate) {
         this.joinDate = joinDate;
+    }
+
+    public String getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(String gameState) {
+        this.gameState = gameState;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void advanceTurn(){
+        this.turn++;
     }
 }

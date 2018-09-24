@@ -30,6 +30,12 @@ public class Salvo {
         this.gamePlayer = gamePlayer;
     }
 
+    Salvo(GamePlayer gamePlayer,List<String> locations, int turn) {
+        this.locations = locations;
+        this.turn = turn;
+        this.gamePlayer = gamePlayer;
+    }
+
     public GamePlayer getGamePlayer() {
         return gamePlayer;
     }
