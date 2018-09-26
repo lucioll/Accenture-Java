@@ -1,0 +1,14 @@
+Reporte task3:
+
+1)Implementacion de la clase Ship junto con shipRepository 
+para poder representarlos y guardarlos en la base de datos.
+2)Generar la relacion OneToMany entre Ship y GamePlayer.
+3)Actualizacion del controlador para obtener la informacion
+necesaria de la base de datos.
+4)Implementacion de la parte visual del tablero.
+
+Conocimientos logrados:
+Mejor entendimiento de los DTO y las relaciones entre clases.
+Uso de @ElementCollection para evitar crear un repositorio
+nuevo innecesario para un tipo de dato simple.
+Manejo de pathVariable.

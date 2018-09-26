@@ -1,0 +1,28 @@
+Reporte task5:
+
+Implementacion de las clases Score y ScoreRepository para
+poder crear una leaderBoard que tenga en cuenta todos los
+partidos jugados por jugador.
+
+Actualizacion del salvoController para poder reunir la infor
+macion necesaria.
+
+Log de errores encontrados:
+En salvoApplication hay que tener cuidado al generar la infor
+macion a guardar en los repositorios... Debe seguir algun orden
+que aun no entiendo bien como funciona.
+Con esta linea pinchaba:
+dto.put("gamePlayers",
+ gamePlayer.getGame().getGamePlayers()); 
+/// ASI ANDABA ANTES Y HOY PINCHO... algo asi nos habias preguntado
+ de porque andaba con player.
+
+
+SOLUCION:  dto.put("gamePlayers", gamePlayer.getGame().
+getGamePlayers().stream().map(gamePlayer1 ->
+  
+gamePlayersDTO(gamePlayer)).collect(Collectors.toList()));
+
+No se mostraban las partes del barco golpeado... Solucion
+cambio en la logica del game_viewDTO, se necesitaban todos
+los salvos del game no solo los del gamePlayer

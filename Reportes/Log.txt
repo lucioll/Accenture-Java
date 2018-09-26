@@ -1,0 +1,22 @@
+Log errores 05/09 LLL:
+-- PROBLEMA
+++ SOLUCION
+
+--GamePlayers se llama recursivamente
+++Agregar @JsonIgnore arriba del getGamePlayers de player 
+	o del game
+
+--Se generan keys de mas al ver los Json en /api/games o /api
+	/api/players
+++Utilizar @JsonIgnore en algunos getters
+
+--Los ID se generan incrementalmente desde, ejemplo: si creo
+	5 ids para jugadores y luego 3 ids para games en vez
+	de tener ids del 1 al 5 para jugadores y ids del 1 al 3
+	para games tengo 1 a 5 y 6 a 8.
+++Cambiar @GeneratedValue(strategy = GenerationType.AUTO)
+	por @GeneratedValue(strategy = GenerationType.IDENTITY)
+	en Games,Players,GamePlayers.
+
+++Para la parte web en la que se necesitan los archivos HTML
+	y .js

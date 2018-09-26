@@ -1,0 +1,16 @@
+1)Clonar repo Git: git clone https://github.com/spring-guides/gs-securing-web.git
+
+2)cd into gs-securing-web/initial
+
+3)Modificar build.gradle en el ide con :
+dependencies {
+    ...
+    compile("org.springframework.boot:spring-boot-starter-security")
+    ...
+}
+
+4)Import settings o algo asi que salta en el IDE
+
+Log 13/09/18:
+-org.springframework.data.mapping.PropertyReferenceException: No property
++https://stackoverflow.com/questions/19583540/spring-data-jpa-no-property-found-for-type-exception

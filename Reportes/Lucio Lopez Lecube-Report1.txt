@@ -1,0 +1,4 @@
+Instalación:
+1)JDK SE 8, modificando variables de entorno
+2)Gradle 4.10, modificando variables de entorno
+3)IntelliJ

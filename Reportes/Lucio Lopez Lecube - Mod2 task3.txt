@@ -1,0 +1,8 @@
+Reporte mod2 task3:
+1)Actualizacion del SalvoController para poder soportar la
+logica de Place Ships mediante un POST al back-end con la 
+URL /api/game/{gameId}/players.
+
+2)Se agrego al GamePlayer un atributo privado de tipo String
+que indica el gameState para luego poder ser consultado
+en el GamePlayerDTO.

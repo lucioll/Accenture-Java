@@ -1,0 +1,9 @@
+Reporte task4:
+
+Implementacion de logica de las clases Salvo y SalvoRepository
+para poder representar un hit en los barcos.
+Actualizacion de los controladores para poder mostrar la infor
+macion necesaria en la web.
+
+Problema:
+Aun no puedo mostrar el numero del turno en la pagina web.

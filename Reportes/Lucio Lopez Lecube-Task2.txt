@@ -1,0 +1,26 @@
+Reporte Task2:
+
+Implementacion de las siguientes clases e interfaces:
+1) GamePlayer: clase para poder representar un player que esta participando en un game
+2) GamePlayerRepository: interfaz para representar el repositorio de gamePlayers
+3) SalvoController: RestController para el manejo de la información que se quiere mostrar mediante los
+Json en la api.
+
+Cosas aprendidas y log de errores con soluciones:
+DTO(data transfer objects): es una estructura para organizar el traspaso de informacion.
+Log errores 05/09:
+--GamePlayers se llama recursivamente
+++Agregar @JsonIgnore arriba del getGamePlayers de player 
+	o del game
+
+--Se generan keys de mas al ver los Json en /api/games o /api
+	/api/players
+++Utilizar @JsonIgnore en algunos getters
+
+--Los ID se generan incrementalmente, ejemplo: si creo
+	5 ids para jugadores en el repositorio de players y luego 3 ids para games en el
+	repositorio de games en vez de tener ids del 1 al 5 para jugadores y ids del 1 al 3
+	para games tengo 1 a 5 y 6 a 8.
+++Cambiar @GeneratedValue(strategy = GenerationType.AUTO)
+	por @GeneratedValue(strategy = GenerationType.IDENTITY)
+	en Games,Players,GamePlayers.

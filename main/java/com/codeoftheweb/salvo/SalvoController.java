@@ -267,14 +267,29 @@ public class SalvoController {
             if (self_win && opponent_win) {
                 gamePlayer.setGameState("TIE");
                 opponent.setGameState("TIE");
+                Score score1 = new Score(gamePlayer.getGame(), gamePlayer.getPlayer(), LocalDateTime.now(), 0.5f);
+                Score score2 = new Score(opponent.getGame(), opponent.getPlayer(), LocalDateTime.now(), 0.5f);
+                scoreRepository.save(score1);
+                scoreRepository.save(score2);
             } else if (!self_win && !opponent_win) {
                 //Siguen jugando
                 gamePlayer.setGameState("WAIT");
                 opponent.setGameState("PLAY");
+            } else if (self_win) {
+                gamePlayer.setGameState("WON");
+                opponent.setGameState("LOST");
+                Score score1 = new Score(gamePlayer.getGame(), gamePlayer.getPlayer(), LocalDateTime.now(), 1.0f);
+                Score score2 = new Score(opponent.getGame(), opponent.getPlayer(), LocalDateTime.now(), 0.0f);
+                scoreRepository.save(score1);
+                scoreRepository.save(score2);
             } else {
-                //Alguno gano
-                gamePlayer.setGameState( (self_win) ? "WIN" : "LOST");
-                opponent.setGameState( (opponent_win) ? "WIN" : "LOST");
+                gamePlayer.setGameState("LOST");
+                opponent.setGameState("WON");
+                Score score1 = new Score(gamePlayer.getGame(), gamePlayer.getPlayer(), LocalDateTime.now(), 0.0f);
+                Score score2 = new Score(opponent.getGame(), opponent.getPlayer(), LocalDateTime.now(), 1.0f);
+                scoreRepository.save(score1);
+                scoreRepository.save(score2);
+
             }
         } else{
             //Siguen jugando

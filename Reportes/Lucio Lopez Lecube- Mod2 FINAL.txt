@@ -1,0 +1,11 @@
+Reporte Mod2 Final:
+
+1)Implementacion del metodo Post para enviar informacion desde
+el front al back acerca de los disparos realizados.
+2)Actualizacion del JSON para poder mostrar hits e implemen
+tacion de la logica necesaria para poder calcular hits acumu
+lativos turno a turno y verificar si algun barco fue hundido.
+Tambien se agrego la logica para poder ir cambiando los estados
+de los GamePlayers a wait y play segun corresponda.
+3)Implementacion de la logica para poder verificar el estado
+final del juego: TIE, LOST y WIN. Se agregaron los scores finales.

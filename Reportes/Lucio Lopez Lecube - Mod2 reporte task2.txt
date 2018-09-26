@@ -1,0 +1,14 @@
+Reporte mod2 task2:
+
+Tareas encomendadas:
+1)Permitir a un usuario LOGGEADO que pueda crear una nueva
+partida.
+2)Permitir a un usuario LOGGEADO poder unirse a una partida
+ya creada que tenga menos de 2 GamePlayers.
+
+Para poder cumplir con estas tareas se debio implementar los 
+metodos GET y POST en el SalvoController:
+*GET: se pide informacion al back desde el front para obtener
+la informacion necesaria para mostrar los games o players
+*POST: se envia informacion al back para poder persistir los
+nuevos datos ya sea de un Player nuevo o una partida nueva.

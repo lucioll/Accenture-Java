@@ -1,0 +1,18 @@
+Reporte:
+1)Instalacion de spring security: 
+	a)Modificar build.gradle en el ide con :
+		dependencies {
+		    ...
+		    compile("org.springframework.boot:spring-boot-starter-security")
+		    ...
+		}
+
+	b)Import settings en el pop up del IDE o rebuild
+con gradle.
+
+2)Modificacion de la clase Player para poder soportar login.
+3)Modificacion de la clase SalvoApplication y SalvoController
+para poder realizar los protocolos de Autenticacion y Autori
+zacion.
+4)Modificacion del JSON generado para la vista api/games para
+poder levantar los datos correctamente desde el .js
