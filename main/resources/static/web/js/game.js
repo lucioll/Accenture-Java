@@ -88,7 +88,7 @@ function refreshGameView(_url) {
             console.log("waitState: " + waitState);
 
             if (waitState === false) {
-                showSelf(gameViewData);
+                showSelf(gameViewData, gamePlayerData.turn);
                 makeGameRecordTable(gameViewData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gameViewData.hits.self, "gameRecordSelfTable");
 
@@ -99,10 +99,17 @@ function refreshGameView(_url) {
             }
             if (gamePlayerData.gameState === "WAITINGFOROPP"){
                 $('#battleGrids').show('puff', 'slow');
+                waitState = true;
+                setTimeout(
+                    function()
+                    {
+                        refreshGameView(makeUrl());
+                        console.log("...refreshing gameview...");
+                    }, 5000);
             }
 
             if (gamePlayerData.gameState === "WON"){
-                showSelf(gamePlayerData);
+                showSelf(gameViewData, gamePlayerData.turn);
                 makeGameRecordTable(gameViewData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gameViewData.hits.self, "gameRecordSelfTable");
                 $('#battleGrids').show('puff', 'slow');
@@ -110,7 +117,7 @@ function refreshGameView(_url) {
                 console.log("yes you won");
             }
             if (gamePlayerData.gameState === "TIE"){
-                showSelf(gamePlayerData);
+                showSelf(gameViewData, gamePlayerData.turn);
                 makeGameRecordTable(gameViewData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gameViewData.hits.self, "gameRecordSelfTable");
                 $('#battleGrids').show('puff', 'slow');
@@ -118,7 +125,7 @@ function refreshGameView(_url) {
                 console.log("TIED MATCH");
             }
             if (gamePlayerData.gameState === "LOST"){
-                showSelf(gamePlayerData);
+                showSelf(gameViewData, gamePlayerData.turn);
                 makeGameRecordTable(gameViewData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gameViewData.hits.self, "gameRecordSelfTable");
                 $('#battleGrids').show('puff', 'slow');
@@ -139,7 +146,7 @@ function refreshGameView(_url) {
                     }, 5000);
             }
             if (gamePlayerData.gameState == "PLAY"){
-                showSelf(gameViewData);
+                showSelf(gameViewData, gamePlayerData.turn);
                 makeGameRecordTable(gameViewData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gameViewData.hits.self, "gameRecordSelfTable");
 
@@ -181,7 +188,7 @@ function refreshGameView(_url) {
     });
 }
 
-function showSelf (gamePlayerData) {
+function showSelf (gamePlayerData, gpTurn) {
     you = "";
     viewer = "";
     youID = "";
@@ -238,14 +245,15 @@ function showSelf (gamePlayerData) {
                 $(cellID).text(salvo.turn);
             } else {
                 cellID = "#p1_" + location;
-                if ($(cellID).hasClass("shipCell")) {
-                    $(cellID).addClass("hitCell");
-
-          //          console.log("Opponent Hits Ship on " + location);
-                } else {
-                    $(cellID).addClass("salvoCellSelf");
-                    $(cellID).text(salvo.turn);
-          //          console.log("Opponent salvo on " + location);
+                if (salvo.turn < gpTurn) {
+                    if ($(cellID).hasClass("shipCell")) {
+                        $(cellID).addClass("hitCell");
+                        //          console.log("Opponent Hits Ship on " + location);
+                    } else {
+                        $(cellID).addClass("salvoCellSelf");
+                        $(cellID).text(salvo.turn);
+                        //          console.log("Opponent salvo on " + location);
+                    }
                 }
             }
 

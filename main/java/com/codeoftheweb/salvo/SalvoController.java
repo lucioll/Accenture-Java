@@ -140,7 +140,7 @@ public class SalvoController {
 
         GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
-        if (authentication.getName() != gamePlayer.getPlayer().getEmail()) {
+        if (!authentication.getName().equals(gamePlayer.getPlayer().getEmail())) {
             return new ResponseEntity<>(makeMap("error", "The current user is not the GamePlayer the ID" +
                     "references"),
                     HttpStatus.UNAUTHORIZED);
@@ -178,7 +178,7 @@ public class SalvoController {
                                                                   Authentication authentication) {
         if (authentication != null || !(authentication instanceof AnonymousAuthenticationToken)) {
             GamePlayer game_player = gamePlayerRepository.findById(gamePlayerId).get();
-            if (game_player.getPlayer().getEmail() == authentication.getName()) {
+            if (game_player.getPlayer().getEmail().equals(authentication.getName())) {
                 return new ResponseEntity<>(game_viewDTO(game_player), HttpStatus.ACCEPTED);
             }
         }
@@ -226,7 +226,7 @@ public class SalvoController {
 
         GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
-        if (authentication.getName() != gamePlayer.getPlayer().getEmail()) {
+        if (!authentication.getName().equals(gamePlayer.getPlayer().getEmail())) {
             return new ResponseEntity<>(makeMap("error", "The current user is not the GamePlayer the ID" +
                     "references"),
                     HttpStatus.UNAUTHORIZED);
@@ -237,7 +237,7 @@ public class SalvoController {
                     HttpStatus.FORBIDDEN);
         }
 
-        GamePlayer opponent = gamePlayer.getGame().getGamePlayers().stream().filter(x -> x != gamePlayer).
+        GamePlayer opponent = gamePlayer.getGame().getGamePlayers().stream().filter(x -> x !=(gamePlayer)).
                 findAny().get();
 
 
@@ -366,9 +366,9 @@ public class SalvoController {
         hits.put("self", new ArrayList<>());
         hits.put("opponent", new ArrayList<>());
 
-        if (gamePlayer.getGame().getGamePlayers().stream().filter(x -> x != gamePlayer).
+        if (gamePlayer.getGame().getGamePlayers().stream().filter(x -> x !=(gamePlayer)).
                 findAny().isPresent()) {
-            GamePlayer opponent = gamePlayer.getGame().getGamePlayers().stream().filter(x -> x != gamePlayer).
+            GamePlayer opponent = gamePlayer.getGame().getGamePlayers().stream().filter(x -> x !=(gamePlayer)).
                     findAny().get();
 
             List<Map<String, Object>> hit_self = hitsDTO(opponent, gamePlayer);
@@ -388,46 +388,48 @@ public class SalvoController {
         List<Map<String, Object>> hit_selfs = new ArrayList<>();
 
         for (Salvo salvo : my_salvoes) {
-            //Obtengo los hits al barco del oponente si los hubiera
-            List<String> hitLocations = salvo.getLocations().stream()
-                    .flatMap(salvo_loc -> opponent.getShips().stream()
-                            .flatMap(ship -> ship.getLocations().stream()
-                                    .filter(ship_loc_opp -> {
-                                        return ship_loc_opp.equals(salvo_loc);
-                                    })
-                            )).collect(Collectors.toList());
-            Map<String, Object> aux_DTO = new LinkedHashMap<>();
-            aux_DTO.put("hitLocations", hitLocations);
+            if (salvo.getTurn() < opponent.getTurn()) {
+                //Obtengo los hits al barco del oponente si los hubiera
+                List<String> hitLocations = salvo.getLocations().stream()
+                        .flatMap(salvo_loc -> opponent.getShips().stream()
+                                .flatMap(ship -> ship.getLocations().stream()
+                                        .filter(ship_loc_opp -> {
+                                            return ship_loc_opp.equals(salvo_loc);
+                                        })
+                                )).collect(Collectors.toList());
+                Map<String, Object> aux_DTO = new LinkedHashMap<>();
+                aux_DTO.put("hitLocations", hitLocations);
 
-            //Calculo los daños a los barcos del oponente (es acumulativo)
-            Map<String, Integer> damages = new LinkedHashMap<>();
-            for (Ship ship : opponent.getShips()) {
-                damages.put(ship.getType() + "Hits", (int)ship.getLocations().stream().
-                        filter(ship_loc -> hitLocations.contains(ship_loc)).count());
+                //Calculo los daños a los barcos del oponente (es acumulativo)
+                Map<String, Integer> damages = new LinkedHashMap<>();
+                for (Ship ship : opponent.getShips()) {
+                    damages.put(ship.getType() + "Hits", (int) ship.getLocations().stream().
+                            filter(ship_loc -> hitLocations.contains(ship_loc)).count());
+                }
+
+                try {
+                    Map<String, Object> last_hit = hit_selfs.get(hit_selfs.size() - 1);
+                    Map<String, Integer> last_damages = (Map<String, Integer>) last_hit.get("damages");
+                    damages.put("carrier", last_damages.get("carrier") + damages.get("carrierHits"));
+                    damages.put("battleship", last_damages.get("battleship") + damages.get("battleshipHits"));
+                    damages.put("submarine", last_damages.get("submarine") + damages.get("submarineHits"));
+                    damages.put("destroyer", last_damages.get("destroyer") + damages.get("destroyerHits"));
+                    damages.put("patrolboat", last_damages.get("patrolboat") + damages.get("patrolboatHits"));
+                } catch (Exception e) {
+                    //Aun no habia ningun last_hit
+                    damages.put("carrier", damages.get("carrierHits"));
+                    damages.put("battleship", damages.get("battleshipHits"));
+                    damages.put("submarine", damages.get("submarineHits"));
+                    damages.put("destroyer", damages.get("destroyerHits"));
+                    damages.put("patrolboat", damages.get("patrolboatHits"));
+                }
+
+                aux_DTO.put("damages", damages);
+
+                aux_DTO.put("turn", salvo.getTurn());
+                aux_DTO.put("missed", salvo.getLocations().size() - hitLocations.size());
+                hit_selfs.add(aux_DTO);
             }
-
-            try {
-                Map<String, Object> last_hit = hit_selfs.get(hit_selfs.size() - 1);
-                Map<String, Integer> last_damages = (Map<String, Integer>) last_hit.get("damages");
-                damages.put("carrier", last_damages.get("carrier") + damages.get("carrierHits"));
-                damages.put("battleship", last_damages.get("battleship") + damages.get("battleshipHits"));
-                damages.put("submarine", last_damages.get("submarine") + damages.get("submarineHits"));
-                damages.put("destroyer", last_damages.get("destroyer") + damages.get("destroyerHits"));
-                damages.put("patrolboat", last_damages.get("patrolboat") + damages.get("patrolboatHits"));
-            } catch (Exception  e) {
-                //Aun no habia ningun last_hit
-                damages.put("carrier", damages.get("carrierHits"));
-                damages.put("battleship", damages.get("battleshipHits"));
-                damages.put("submarine", damages.get("submarineHits"));
-                damages.put("destroyer", damages.get("destroyerHits"));
-                damages.put("patrolboat", damages.get("patrolboatHits"));
-            }
-
-            aux_DTO.put("damages", damages);
-
-            aux_DTO.put("turn", salvo.getTurn());
-            aux_DTO.put("missed", salvo.getLocations().size() - hitLocations.size());
-            hit_selfs.add(aux_DTO);
         }
         return hit_selfs;
     }
